@@ -134,7 +134,7 @@ Use a search engine (e.g., Google) or a chat LLM to find out how to calculate a 
 I used Google to search how to find a rolling average in R and found an article on the website GeeksForGeeks.org called "How to calculate a rolling average in R" that showed a few examples of how to do it. I didn't need to modify much of the code.
 
 ```{r}
-rolling_temp_avg <- rollmean(temp_dat, k = 5, align = "right")
+rolling_temp_avg <- rollmean(temp_dat, k = 5, align = "right", fill = NA)
 ```
 
 
@@ -148,7 +148,10 @@ rolling_temp_avg <- rollmean(temp_dat, k = 5, align = "right")
 A 5-year average is the average of the sum of data points over a 5-year period, while an annual average is the average of data points calculated over a one-year period.
 
 ```{r}
-
+temp_dat_roll <- temp_dat |> 
+  mutate(rolling_avg_5 = rollmean(rolling_temp_avg, k = 5, align = "right", fill = NA), 
+         rolling_avg_10 = rollmean(rolling_temp_avg, k = 10, align = "right", fill = NA), 
+         rolling_avg_20 = rollmean(rolling_temp_avg, k = 20, align = "right", fill = NA))
 ```
 
 **Question 8:**
@@ -157,11 +160,22 @@ Plot the different averages on the *same plot* and describe what differences you
 
 **Answer 8:**
 
+
+
+```{r}
+temp_plot |> 
+  ggplot(aes(x = Year, y = Global_Mean_Temp)) +
+  geom_line() + geom_point()
+```
+
+
 **Question 9:**
 
 By examining the data here, what evidence do you find or not find for such a pause? 
 
 **Answer 9:**
+
+The pauses in global warming could be due to the Earth having natural periods of cooling and warming over time. Additionally, naturally occurring phenomena, such as the Pacific Ocean's winds cooling the surface temperature, as well as El Nino and La Nina. 
 
 ## Longer term trends in CO2 Records
 
