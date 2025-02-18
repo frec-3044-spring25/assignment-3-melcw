@@ -45,6 +45,8 @@ Describe the overall trend in the CO2 data.
 
 **Answer 1:**
 
+The CO2 data shows that there is a strong, positive, somewhat linear relationship between year and carbon dioxide concentration. As the year increases, the CO2 concentration also increases.
+
 **Question 2:**
 
 How does CO2 vary within a year?  What month is it at max?  Min?  What might explain this sub-annual pattern? (you will need to write code and make a plot to answer this question)
