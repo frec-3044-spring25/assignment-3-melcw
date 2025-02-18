@@ -53,6 +53,17 @@ How does CO2 vary within a year?  What month is it at max?  Min?  What might exp
 
 **Answer 2:**
 
+CO2 concentration seems to increase then peak towards the beginning/middle of the year, the decreased throughout the summer, then begin increasing again around September for the year 2015. May is the maximum concentration, and September is the minimum concentration. Many plants lose their leaves and begin to decompose around Fall, which would explain why the CO2 levels begin to rise during this time over into the next year. This also makes sense for why it begins to decrease after May because the plants are absorbing much of the CO2 in the air during the summer.
+
+```{r}
+co2_plot <- co2 |> 
+  filter(year == 2015)
+
+ggplot(co2_plot, aes(x = month, y = monthly_average)) +
+  geom_line() + geom_point() +
+  labs(title = "CO2 Concentration (ppm) over months in 2015",
+       x = "Month", y = "CO2 Concentration (ppm)")
+```
 
 
 ## Global Temperature Data
@@ -69,10 +80,11 @@ Describe the data set to the best of your ability, given the documentation provi
 
 - Where is the data from?
 - Describe the class of each column and what units it is measured in. 
-- What is the difference between "global temperature" and "global temperature anomaly"? 
+- What is the difference between "global temperature" and "global temperature anomaly"?
 
 **Answer 3:**
 
+The data was recorded by NASA's Goddard Institute for Space Studies and comes from the globe's surface temperature. Each of the columns's class is numerical. The first column is time measured in years, the second column is the change in temperature without the Lowess Smoothing method measured in difference in Celsius, and the third column is the change in temperature using the Lowess Smoothing method measured in difference in Celsius. The difference between global temperature and global temperature anomaly is that global temperature is the actual global surface temperature measured, while global temperature anomaly is the difference in the temperature measured and the global average temperature over time.
 
 **Question 4:**
 
@@ -82,11 +94,30 @@ You'll need to determine the file's delimiter and any comments or skips. You wil
 
 **Answer 4:**
 
+```{r}
+temp_dat <- read_table("https://data.giss.nasa.gov/gistemp/graphs/graph_data/Global_Mean_Estimates_based_on_Land_and_Ocean_Data/graph.txt",
+                       col_names = c("Year", "Global Mean Temp", "Temp (Lowess)"),
+                       na = c("Land-Ocean", "Temperature", "Index", "No_Smoothing", "Lowess(5)",
+                              "----------------------------", "Year", "--------------------------------", "--------------------------------"))
+
+temp_dat
+```
+
 **Question 5:**
 
 Plot the trend in global mean temperatures over time.  Describe what you see in the plot and how you interpret the patterns you observe.
 
 **Answer 5:**
+
+The global mean temperature anomaly generally gradually increases over time. The relationship between time in years and global mean temperature anomaly seems to be positive and fairly strong. This plot shows that the global mean temperature has generally increased over time, which makes sense as the CO2 concentration has also generally increased over time.
+
+```{r}
+temp_dat |> 
+  ggplot(aes(x = Year, y = `Global Mean Temp`)) +
+  geom_line() + geom_point() +
+  labs(title = "Global Mean Temperature over Time",
+       x = "Year", y = "Global Mean Temperature Anomaly")
+```
 
 ## Evaluating the evidence for a "Pause" in warming?
 
