@@ -134,6 +134,8 @@ Use a search engine (e.g., Google) or a chat LLM to find out how to calculate a 
 I used Google to search how to find a rolling average in R and found an article on the website GeeksForGeeks.org called "How to calculate a rolling average in R" that showed a few examples of how to do it. I didn't need to modify much of the code.
 
 ```{r}
+install.packages("zoo")
+library(zoo)
 rolling_temp_avg <- rollmean(temp_dat, k = 5, align = "right", fill = NA)
 ```
 
