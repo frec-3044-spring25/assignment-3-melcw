@@ -96,7 +96,7 @@ You'll need to determine the file's delimiter and any comments or skips. You wil
 
 ```{r}
 temp_dat <- read_table("https://data.giss.nasa.gov/gistemp/graphs/graph_data/Global_Mean_Estimates_based_on_Land_and_Ocean_Data/graph.txt",
-                       col_names = c("Year", "Global Mean Temp", "Temp (Lowess)"),
+                       col_names = c("Year", "Global_Mean_Temp", "Temp_(Lowess)"),
                        na = c("Land-Ocean", "Temperature", "Index", "No_Smoothing", "Lowess(5)",
                               "----------------------------", "Year", "--------------------------------", "--------------------------------"))
 
@@ -113,7 +113,7 @@ The global mean temperature anomaly generally gradually increases over time. The
 
 ```{r}
 temp_dat |> 
-  ggplot(aes(x = Year, y = `Global Mean Temp`)) +
+  ggplot(aes(x = Year, y = Global_Mean_Temp)) +
   geom_line() + geom_point() +
   labs(title = "Global Mean Temperature over Time",
        x = "Year", y = "Global Mean Temperature Anomaly")
@@ -131,12 +131,25 @@ Use a search engine (e.g., Google) or a chat LLM to find out how to calculate a 
 
 **Answer 6:**
 
+I used Google to search how to find a rolling average in R and found an article on the website GeeksForGeeks.org called "How to calculate a rolling average in R" that showed a few examples of how to do it. I didn't need to modify much of the code.
+
+```{r}
+rolling_temp_avg <- rollmean(temp_dat, k = 5, align = "right")
+```
+
+
 **Question 7:**
 
 - What is the meaning of "5-year average" vs. "annual average"?
 - Create a data frame from the annual temperature anomaly data (from Question 4) with three new columns: 5-year running averages, 10-year running averages, and 20-year running averages.
 
 **Answer 7:**
+
+A 5-year average is the average of the sum of data points over a 5-year period, while an annual average is the average of data points calculated over a one-year period.
+
+```{r}
+
+```
 
 **Question 8:**
 
