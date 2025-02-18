@@ -221,11 +221,14 @@ The dataset has 4 columns: the depth that the ice core was taken from measured i
 
 ```{r}
 icecore_dat <- read_table("vostok.icecore.co2",
-                          col_names = c("Depth (m)", "Age of Ice (Years BP)", "Mean Age of Ice (Years BP)", "CO2 Concentration (ppm)",
+                          col_names = c("Depth_(m)", "Age_of_Ice_(Years_BP)", "Mean_Age_of_Ice_(Years_BP)", "CO2_Concentration_(ppm)",
                                         comment = "#"))
 
 icecore_dat <- icecore_dat[-c(1:20),]
 
+icecore_dat |> 
+  ggplot(aes(x = `Age_of_Ice_(Years_BP)`, y = `CO2_Concentration_(ppm)`)) +
+  geom_line() + geom_point()
 ```
 
 # Render and committing
