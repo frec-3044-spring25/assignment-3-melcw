@@ -217,8 +217,14 @@ Your answer to Question 10 is going to be a mix of code chunks and text that you
 
 **Answer 10:**
 
-```{r}
+The dataset has 4 columns: the depth that the ice core was taken from measured in meters, the age of the ice core which is measured in years before present day, the mean age of the air which is the average age of the air sampled measured in years before present day, and CO2 concentration of the sample measured in parts per million. The temporal resolution of the data varies greatly from 1150 to 215.
 
+```{r}
+icecore_dat <- read_table("vostok.icecore.co2",
+                          col_names = c("Depth (m)", "Age of Ice (Years BP)", "Mean Age of Ice (Years BP)", "CO2 Concentration (ppm)",
+                                        comment = "#"))
+
+icecore_dat <- icecore_dat[-c(1:20),]
 
 ```
 
@@ -230,5 +236,4 @@ Remember to Render your document as HTML and comment+push to GitHub your code an
 
 Include citation of any AI-generated assistance or discussion with classmates (per policy in syllabus). Proper documentation of AI-generated assistance includes the prompt, the source (e.g., ChatGPT), and the significant parts of the response.  Proper documentation of discussion with classmates include listing their names and the components discussed.  
 
-
-
+I discussed how to fix certain code errors with Hailey Trittin for Question 4, such as how to read in the data correctly. For Question 7, I asked her about an error I was getting when trying to create the rolling average sets for the 5, 10, and 20 yearspans. I also discussed with her how to remove the first 20 rows of the dataset for question 10.
