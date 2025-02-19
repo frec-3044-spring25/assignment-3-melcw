@@ -96,7 +96,7 @@ You'll need to determine the file's delimiter and any comments or skips. You wil
 
 ```{r}
 temp_dat <- read_table("https://data.giss.nasa.gov/gistemp/graphs/graph_data/Global_Mean_Estimates_based_on_Land_and_Ocean_Data/graph.txt",
-                       col_names = c("Year", "Global_Mean_Temp", "Temp_(Lowess)"),
+                       col_names = c("Year", "Global_Mean_Temp", "Temp_Lowess"),
                        na = c("Land-Ocean", "Temperature", "Index", "No_Smoothing", "Lowess(5)",
                               "----------------------------", "Year", "--------------------------------", "--------------------------------"))
 
@@ -134,8 +134,11 @@ Use a search engine (e.g., Google) or a chat LLM to find out how to calculate a 
 I used Google to search how to find a rolling average in R and found an article on the website GeeksForGeeks.org called "How to calculate a rolling average in R" that showed a few examples of how to do it. I didn't need to modify much of the code.
 
 ```{r}
-install.packages("zoo")
+library(dplyr)
+
+install.packages("zoo", repos = "https://cran.rstudio.com")
 library(zoo)
+
 rolling_temp_avg <- rollmean(temp_dat, k = 5, align = "right", fill = NA)
 ```
 
@@ -162,12 +165,15 @@ Plot the different averages on the *same plot* and describe what differences you
 
 **Answer 8:**
 
-
+The plot shows that the averages are generally the same as time goes on.
 
 ```{r}
-temp_plot |> 
-  ggplot(aes(x = Year, y = Global_Mean_Temp)) +
-  geom_line() + geom_point()
+temp_plot_long <- temp_dat_roll |> 
+  pivot_longer(cols = -Year:Global_Mean_Temp, names_to = "rolling_id", values_to = "rolling_val" )
+
+temp_plot_long |> 
+  ggplot(aes(x = Year, y = rolling_id, color = rolling_val)) +
+  geom_point() + geom_line()
 ```
 
 
@@ -219,19 +225,27 @@ Your answer to Question 10 is going to be a mix of code chunks and text that you
 
 **Answer 10:**
 
-The dataset has 4 columns: the depth that the ice core was taken from measured in meters, the age of the ice core which is measured in years before present day, the mean age of the air which is the average age of the air sampled measured in years before present day, and CO2 concentration of the sample measured in parts per million. The temporal resolution of the data varies greatly from 1150 to 215.
+The dataset has 4 columns: the depth that the ice core was taken from measured in meters, the age of the ice core which is measured in years before present day, the mean age of the air which is the average age of the air sampled measured in years before present day, and CO2 concentration of the sample measured in parts per million. The temporal resolution of the data varies greatly from 1150 to 215. The plot created shows that recent CO2 levels in the atmosphere are much higher than those from previous years. In the icecore data, we can see that the atmospheric CO2 levels seemed to rise and fall periodly. On the other hand, in the recent graph, we can see the CO2 levels are rising drastically over the past 50/75 years.
 
 ```{r}
 icecore_dat <- read_table("vostok.icecore.co2",
-                          col_names = c("Depth_(m)", "Age_of_Ice_(Years_BP)", "Mean_Age_of_Ice_(Years_BP)", "CO2_Concentration_(ppm)",
+                          col_names = c("Depth_m", "Age_of_Ice_Years_BP", "Mean_Age_of_Ice_Years_BP", "CO2_Concentration_ppm",
                                         comment = "#"))
 
 icecore_dat <- icecore_dat[-c(1:20),]
 
 icecore_dat |> 
-  ggplot(aes(x = `Age_of_Ice_(Years_BP)`, y = `CO2_Concentration_(ppm)`)) +
+  ggplot(aes(x = `Age_of_Ice_Years_BP`, y = `CO2_Concentration_ppm`)) +
   geom_line() + geom_point()
 ```
+
+```{r}
+combined_dat <- bind_rows(co2, icecore_dat)
+
+ggplot(combined_dat, aes(x = year, y = monthly_average)) +
+  geom_line() + geom_point()
+```
+
 
 # Render and committing
 
@@ -241,4 +255,4 @@ Remember to Render your document as HTML and comment+push to GitHub your code an
 
 Include citation of any AI-generated assistance or discussion with classmates (per policy in syllabus). Proper documentation of AI-generated assistance includes the prompt, the source (e.g., ChatGPT), and the significant parts of the response.  Proper documentation of discussion with classmates include listing their names and the components discussed.  
 
-I discussed how to fix certain code errors with Hailey Trittin for Question 4, such as how to read in the data correctly. For Question 7, I asked her about an error I was getting when trying to create the rolling average sets for the 5, 10, and 20 yearspans. I also discussed with her how to remove the first 20 rows of the dataset for question 10.
+I discussed how to fix certain code errors with Hailey Trittin for Question 4, such as how to read in the data correctly. For Question 6, I asked about how to convert the dataset to make it possible to create a plot wiht it. For Question 7, I asked her about an error I was getting when trying to create the rolling average sets for the 5, 10, and 20 yearspans. I also discussed with her how to remove the first 20 rows of the dataset for question 10. Additionally, when trying to render my document, I kept getting an error message telling me that 
